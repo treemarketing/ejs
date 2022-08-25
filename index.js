@@ -1,12 +1,19 @@
 const express = require('express');
 const app = express();
-const PORT = 8080;
+const PORT = 3030;
+//IMPLEMENTACION
+const httpServer = require("http").createServer(app);
 
-const server = app.listen(PORT, () => {
-  console.log(`Servidor http escuchando en el puerto ${server.address().port}`);
+const io = require("socket.io")(httpServer, {
+  cors: { origin: '*'},
 });
 
-server.on('error', (error) => console.log(`Error en servidor ${error}`));
+httpServer.listen(process.env.PORT || 8080, () => console.log("SERVER ON"));
+ const server = app.listen(PORT, () => {
+  console.log(`Servidor http escuchando en el puerto ${server.address().port}`);
+ });
+
+//server.on('error', (error) => console.log(`Error en servidor ${error}`));
 app.use('/public', express.static(__dirname + '/public'));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -19,7 +26,35 @@ let productsHC = [
   { id: 2, title: 'nike shoes', price: 102, thumbnail: 'http://localhost:8080/public/nike-shoes.jpg' },
   { id: 3, title: 'adidas shoes', price: 102, thumbnail: 'http://localhost:8080/public/adidas-shoes.jpg' },
 ];
+//parte chat 
+let chat = [{
+  email: "admin@admin.com",
+  msg: "bienvenido",
+  date: new Date().toLocaleDateString()
+}];
 
+
+io.on('connection', (socket) => {
+  console.log("New connection")
+  io.sockets.emit('products', productsHC)
+  io.sockets.emit('chat', chat)
+
+
+  socket.on('newMassage', (msg) => {
+    chat.push(msg)
+    io.sockets.emit('chat', chat)
+  });
+
+
+  socket.on('addProduct', (data) => {
+    productsHC.push(data)
+    io.sockets.emit('products', productsHC)
+  });
+});
+
+
+
+// fin parte chat
 app.get('/products', (req, res) => {
   res.render('pages/products', { title: 'listado de productos', products: productsHC });
 });

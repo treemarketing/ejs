@@ -5,17 +5,22 @@
 
   </head>
   <body>
-    <div id="products"></div>
-    <%- include('../partials/navbar'); %>
+
+    <table id="message"></table>
+
+    <!-- <%- include('../partials/navbar'); %> -->
     <%=title %>
-    <% products.forEach((item)=>{ %>
+    <div id="products"></div>
+
+    <%- include('../partials/chat'); %>
+    <!-- <% products.forEach((item)=>{ %>
         <p>
             id: <%=item.id%><br/>
             titulo: <%=item.title%><br/>
             price: <%=item.price%><br/>
             <img class="product-img" src="<%=item.thumbnail %>"/><br/>
         </p>
-    <% }) %>
+    <% }) %> -->
     <%- include('../partials/footer'); %> 
     <button id="formulario" onclick="window.location.href='http://localhost:8080/form';" >Volver al formulario</button>
   </body>

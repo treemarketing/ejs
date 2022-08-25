@@ -9,7 +9,7 @@ socket.on("connection", () => {
  let prod = [];    
 socket.on("products", (data) => {
     
-    // se puede hacer con un for 
+    // se puede hacer con un for o map
     let = htmlToRender = "";
 
     for (let i = 0; i < data.length; i++){
@@ -23,5 +23,44 @@ socket.on("products", (data) => {
         `
     }
 
-    document.getElementById("products").innerHTML = htmlToRender;
+    //La mejor forma es con reduce
+
+    let htmlReduce = data.reduce((previewHtml, currentHtml) => 
+        previewHtml + `
+        <tr>
+        <td><h1>${ currentHtml.title }</h1></td>
+        <td><h1>${ currentHtml.price }</h1></td>
+        <td><img class="product-img" src="${ currentHtml.thumbnail }"></img></td>
+        
+        </tr>
+        `,""
+    )
+    document.getElementById("products").innerHTML = htmlReduce;
     });
+
+
+
+    socket.on("chat", (data)=>{
+        
+        let htmlReduce = data.reduce((previewHtml, currentHtml) => 
+            previewHtml + `
+            <tr>
+            <td><h1>${ currentHtml.email }</h1></td>
+            <td><h1>${ currentHtml.msg}</h1></td>
+            <td><h1>${ currentHtml.date}</h1></td>
+            
+            </tr>
+            `,""
+        )
+        document.getElementById("message").innerHTML = htmlReduce;
+    })
+
+    function addMessage(mensaje){
+        let messageToAdd = {
+            email: mensaje.email.value,
+            msg: mensaje.messageChat.value,
+            date: new Date().toLocaleDateString(),
+            
+        }   
+        socket.emit("newMassage", messageToAdd )
+    }

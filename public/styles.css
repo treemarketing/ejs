@@ -12,3 +12,18 @@
 h1 {
   font-family: 'Lucida Console', 'Courier New', monospace;
 }
+
+
+.email{
+  color:blue;
+  font-weight:bold;
+}
+
+.date{
+  color:brown;
+}
+
+.msg{
+  color:green;
+  font-style: italic;
+}

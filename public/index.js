@@ -45,9 +45,9 @@ socket.on("products", (data) => {
         let htmlReduce = data.reduce((previewHtml, currentHtml) => 
             previewHtml + `
             <tr>
-            <td><h1>${ currentHtml.email }</h1></td>
-            <td><h1>${ currentHtml.msg}</h1></td>
-            <td><h1>${ currentHtml.date}</h1></td>
+            <td><h1 class="email">${ currentHtml.email }</h1></td>
+            <td><h1 class="msg"> "${ currentHtml.msg}"</h1></td>
+            <td><h1 class="date"> ${ currentHtml.date}</h1></td>
             
             </tr>
             `,""
@@ -63,4 +63,16 @@ socket.on("products", (data) => {
             
         }   
         socket.emit("newMassage", messageToAdd )
+    }
+
+
+
+    function addProduct(product){
+        let productToAdd = {
+            title: product.productName.value,
+            price: product.price.value,
+           thumbnail: product.thumbnail.value,
+            
+        }   
+        socket.emit("addProduct", productToAdd )
     }

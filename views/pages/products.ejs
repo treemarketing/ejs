@@ -5,14 +5,17 @@
 
   </head>
   <body>
-
-    <table id="message"></table>
+    <%- include('../partials/formulario'); %>
+    <div id="products"></div>
 
     <!-- <%- include('../partials/navbar'); %> -->
     <%=title %>
-    <div id="products"></div>
+    
 
+    
     <%- include('../partials/chat'); %>
+    <table id="message"></table>
+    
     <!-- <% products.forEach((item)=>{ %>
         <p>
             id: <%=item.id%><br/>

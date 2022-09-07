@@ -21,17 +21,72 @@ app.use(express.json());
 //linea de configuracion 
 app.set('view engine', 'ejs');
 
-let productsHC = [
-  { id: 1, title: 'nike ball', price: 101, thumbnail: 'http://localhost:8080/public/nike-ball.jpg' },
-  { id: 2, title: 'nike shoes', price: 102, thumbnail: 'http://localhost:8080/public/nike-shoes.jpg' },
-  { id: 3, title: 'adidas shoes', price: 102, thumbnail: 'http://localhost:8080/public/adidas-shoes.jpg' },
-];
+
+//agrego base de datos
+const { options } = require("./db/mariaDB");
+const knex = require("knex")(options);
+
+//agrego base qlite
+const knexQlite = require("knex")({
+  client: "sqlite3",
+  connection: { filename: "./db/ecommerce.sqlite" },
+  useNullAsDefault: true,
+});
+
+let productsHC = [];
+
+knex.from('products').select({
+  id: 'id',
+  title: 'title',
+  price: 'price',
+  thumbnail: 'thumbnail'
+})
+
+// .then((products)=> {
+//   return res.json(products);
+// })
+.then((rows) => {
+  // for (row of rows) {
+    
+    // let productsdb = (`{id:${row['id']}, title:${row['title']}, price:${row['price']}, ${row['thumbnail']}`)
+
+    //lo pude hacer con el forEach
+   rows.forEach(row => productsHC.push({id:row.id, title:row.title, price:row.price, thumbnail:row.thumbnail }))
+    console.log(productsHC)
+  })
+
+.catch((err) => { console.log(err); throw err})
+.finally(() => {
+  knex.destroy();
+});
+
+
 //parte chat 
 let chat = [{
-  email: "admin@admin.com",
-  msg: "bienvenido",
-  date: new Date().toLocaleDateString()
+  // email: "admin@admin.com",
+  // msg: "bienvenido",
+  // date: new Date().toLocaleDateString()
 }];
+
+//conexion base de datos sqlite
+knexQlite.from('msg').select({
+  email: 'email',
+  msg: 'msg',
+  date: 'date'
+})
+
+.then((rows) => {
+
+    //lo pude hacer con el forEach
+   rows.forEach(row => productsHC.push({email:row.email, title:row.title }))
+    console.log(productsHC)
+  })
+
+.catch((err) => { console.log(err); throw err})
+.finally(() => {
+  knex.destroy();
+});
+
 
 
 io.on('connection', (socket) => {
@@ -41,21 +96,59 @@ io.on('connection', (socket) => {
 
 
   socket.on('newMassage', (msg) => {
-    chat.push(msg)
+    //chat.push(msg)
+
+    knexQlite('msg').insert(msg)
+.then(() => console.log("producto agregado"))
+.catch(err => {console.log(err); throw err})
+.finally(() => {
+  productsHC.push(msg)
+  knex.destroy();
+});
+
     io.sockets.emit('chat', chat)
   });
+// fin parte chat
 
 
+
+
+
+//parte productos
   socket.on('addProduct', (data) => {
-    productsHC.push(data)
+   
+    const { options } = require("./db/mariaDB");
+    const knex = require("knex")(options);
+
+knex('products').insert(data)
+.then(() => console.log("producto agregado"))
+.catch(err => {console.log(err); throw err})
+.finally(() => {
+  productsHC.push(data)
+  knex.destroy();
+});
     io.sockets.emit('products', productsHC)
   });
 });
 
 
 
-// fin parte chat
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 app.get('/products', (req, res) => {
+  
   res.render('pages/products', { title: 'listado de productos', products: productsHC });
 });
 
@@ -84,6 +177,6 @@ app.post('/products', (req, res) => {
   let nuevoId = lastId.id + 1;
   let insertBody = {id: nuevoId, title: body.name, price: body.price, thumbnail: body.thumbnail}
   productsHC.push(insertBody);
- 
+  // knex('products').insert(productsHC)
   //res.redirect(301 ,"/products")
 });

@@ -23,7 +23,8 @@ socket.on("products", (data) => {
         `
     }
 
-    //La mejor forma es con reduce
+    //La mejor forma es con reduce lo hago desde la base de datos de prod
+    
 
     let htmlReduce = data.reduce((previewHtml, currentHtml) => 
         previewHtml + `

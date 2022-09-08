@@ -35,31 +35,35 @@ const knexQlite = require("knex")({
 
 let productsHC = [];
 
-knex.from('products').select({
-  id: 'id',
-  title: 'title',
-  price: 'price',
-  thumbnail: 'thumbnail'
-})
+function getProducts(){
 
-// .then((products)=> {
-//   return res.json(products);
-// })
-.then((rows) => {
-  // for (row of rows) {
-    
-    // let productsdb = (`{id:${row['id']}, title:${row['title']}, price:${row['price']}, ${row['thumbnail']}`)
-
-    //lo pude hacer con el forEach
-   rows.forEach(row => productsHC.push({id:row.id, title:row.title, price:row.price, thumbnail:row.thumbnail }))
-    console.log(productsHC)
+  knex.from('products').select({
+    id: 'id',
+    title: 'title',
+    price: 'price',
+    thumbnail: 'thumbnail'
   })
+  
+  // .then((products)=> {
+  //   return res.json(products);
+  // })
+  .then((rows) => {
+    // for (row of rows) {
+      
+      // let productsdb = (`{id:${row['id']}, title:${row['title']}, price:${row['price']}, ${row['thumbnail']}`)
+  
+      //lo pude hacer con el forEach
+     rows.forEach(row => productsHC.push({id:row.id, title:row.title, price:row.price, thumbnail:row.thumbnail }))
+      console.log(productsHC)
+    })
+  
+  .catch((err) => { console.log(err); throw err})
+  .finally(() => {
+    knex.destroy();
+  });
+}
 
-.catch((err) => { console.log(err); throw err})
-.finally(() => {
-  knex.destroy();
-});
-
+getProducts()
 
 //parte chat 
 let chat = [{
@@ -71,22 +75,21 @@ let chat = [{
 //conexion base de datos sqlite
 knexQlite.from('msg').select({
   email: 'email',
-  msg: 'msg',
-  date: 'date'
-})
+   msg: 'msg',
+   date: 'date'
+  })
 
 .then((rows) => {
 
     //lo pude hacer con el forEach
-   rows.forEach(row => productsHC.push({email:row.email, title:row.title }))
-    console.log(productsHC)
+   rows.forEach(row => chat.push({email:row.email, msg:row.msg, date:row.date }))
+    console.log(chat)
   })
 
 .catch((err) => { console.log(err); throw err})
 .finally(() => {
-  knex.destroy();
+  knexQlite.destroy();
 });
-
 
 
 io.on('connection', (socket) => {
@@ -99,13 +102,12 @@ io.on('connection', (socket) => {
     //chat.push(msg)
 
     knexQlite('msg').insert(msg)
-.then(() => console.log("producto agregado"))
+.then(() => console.log("mensaje enviado"))
 .catch(err => {console.log(err); throw err})
 .finally(() => {
-  productsHC.push(msg)
   knex.destroy();
 });
-
+    chat.push(msg)
     io.sockets.emit('chat', chat)
   });
 // fin parte chat
@@ -124,9 +126,9 @@ knex('products').insert(data)
 .then(() => console.log("producto agregado"))
 .catch(err => {console.log(err); throw err})
 .finally(() => {
-  productsHC.push(data)
   knex.destroy();
 });
+    productsHC.push(data)
     io.sockets.emit('products', productsHC)
   });
 });
@@ -177,6 +179,4 @@ app.post('/products', (req, res) => {
   let nuevoId = lastId.id + 1;
   let insertBody = {id: nuevoId, title: body.name, price: body.price, thumbnail: body.thumbnail}
   productsHC.push(insertBody);
-  // knex('products').insert(productsHC)
-  //res.redirect(301 ,"/products")
 });

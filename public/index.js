@@ -39,7 +39,7 @@ socket.on("products", (data) => {
     document.getElementById("products").innerHTML = htmlReduce;
     });
 
-
+    
 
     socket.on("chat", (data)=>{
         
@@ -55,6 +55,7 @@ socket.on("products", (data) => {
         )
         document.getElementById("message").innerHTML = htmlReduce;
     })
+
 
     function addMessage(mensaje){
         let messageToAdd = {

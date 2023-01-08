@@ -5,9 +5,16 @@ const knex = require("knex")(options);
 
 
 let productsHC = [
-    { title: 'nike ball', price: 101, thumbnail: 'http://localhost:8080/public/nike-ball.jpg' },
-    { title: 'nike shoes', price: 102, thumbnail: 'http://localhost:8080/public/nike-shoes.jpg' },
-    { title: 'adidas shoes', price: 102, thumbnail: 'http://localhost:8080/public/adidas-shoes.jpg' },
+    { title: 'nike ball', price: 120, thumbnail: 'http://localhost:8080/public/nike-ball.jpg' },
+    { title: 'nike shoes', price: 580, thumbnail: 'http://localhost:8080/public/nike-shoes.jpg' },
+    { title: 'adidas shoes', price: 900, thumbnail: 'http://localhost:8080/public/adidas-shoes.jpg' },
+    { title: 'adidas shoes', price: 1280, thumbnail: 'http://localhost:8080/public/adidas-shoes.jpg' },
+    { title: 'adidas shoes', price: 1700, thumbnail: 'http://localhost:8080/public/adidas-shoes.jpg' },
+    { title: 'adidas shoes', price: 2300, thumbnail: 'http://localhost:8080/public/adidas-shoes.jpg' },
+    { title: 'adidas shoes', price: 2860, thumbnail: 'http://localhost:8080/public/adidas-shoes.jpg' },
+    { title: 'adidas shoes', price: 3350, thumbnail: 'http://localhost:8080/public/adidas-shoes.jpg' },
+    { title: 'rebook shoes', price: 4000, thumbnail: 'http://localhost:8080/public/adidas-shoes.jpg' },
+    { title: 'adidas shoes', price: 4990, thumbnail: 'http://localhost:8080/public/adidas-shoes.jpg' },
   ];
 
 //inserto productos

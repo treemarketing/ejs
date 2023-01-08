@@ -22,16 +22,16 @@ app.use(express.json());
 app.set('view engine', 'ejs');
 
 
-//agrego base de datos
+//agrego base de datos mariadb
 const { options } = require("./db/mariaDB");
 const knex = require("knex")(options);
 
 //agrego base qlite
-const knexQlite = require("knex")({
-  client: "sqlite3",
-  connection: { filename: "./db/ecommerce.sqlite" },
-  useNullAsDefault: true,
-});
+// const knexQlite = require("knex")({
+//   client: "sqlite3",
+//   connection: { filename: "./db/ecommerce.sqlite" },
+//   useNullAsDefault: true,
+// });
 
 let productsHC = [];
 
@@ -63,33 +63,38 @@ function getProducts(){
   });
 }
 
-getProducts()
+// getProducts()
 
 //parte chat 
+
+//ARRAY CHAT 
 let chat = [{
   // email: "admin@admin.com",
   // msg: "bienvenido",
   // date: new Date().toLocaleDateString()
 }];
 
+
+
 //conexion base de datos sqlite
-knexQlite.from('msg').select({
-  email: 'email',
-   msg: 'msg',
-   date: 'date'
-  })
 
-.then((rows) => {
+// knexQlite.from('msg').select({
+//   email: 'email',
+//    msg: 'msg',
+//    date: 'date'
+//   })
 
-    //lo pude hacer con el forEach
-   rows.forEach(row => chat.push({email:row.email, msg:row.msg, date:row.date }))
-    console.log(chat)
-  })
+// .then((rows) => {
 
-.catch((err) => { console.log(err); throw err})
-.finally(() => {
-  knexQlite.destroy();
-});
+//     //lo pude hacer con el forEach
+//    rows.forEach(row => chat.push({email:row.email, msg:row.msg, date:row.date }))
+//     console.log(chat)
+//   })
+
+// .catch((err) => { console.log(err); throw err})
+// .finally(() => {
+//   knexQlite.destroy();
+// });
 
 
 io.on('connection', (socket) => {
@@ -99,13 +104,13 @@ io.on('connection', (socket) => {
 
 
   socket.on('newMassage', (msg) => {
-    //chat.push(msg)
+    chat.push(msg)
 
-    knexQlite('msg').insert(msg)
+    // knexQlite('msg').insert(msg)
 .then(() => console.log("mensaje enviado"))
 .catch(err => {console.log(err); throw err})
 .finally(() => {
-  knex.destroy();
+  // knex.destroy();
 });
     chat.push(msg)
     io.sockets.emit('chat', chat)
@@ -116,7 +121,7 @@ io.on('connection', (socket) => {
 
 
 
-//parte productos
+//parte productos CON MARIADB
   socket.on('addProduct', (data) => {
    
     const { options } = require("./db/mariaDB");

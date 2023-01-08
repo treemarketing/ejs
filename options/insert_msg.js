@@ -9,8 +9,54 @@ const knex = require("knex")({
 let chat = [{
     email: "admin@admin.com",
     msg: "bienvenido",
- 
-  }];
+    date: 12/09/2022
+  },
+  {
+    email: "admin@admin.com",
+    msg: "bienvenido",
+    date: 12/09/2022
+  },
+  {
+    email: "admin@admin.com",
+    msg: "bienvenido",
+    date: 12/09/2022
+  },
+  {
+    email: "admin@admin.com",
+    msg: "bienvenido",
+    date: 12/09/2022
+  },
+  {
+    email: "admin@admin.com",
+    msg: "bienvenido",
+    date: 12/09/2022
+  },
+  {
+    email: "admin@admin.com",
+    msg: "bienvenido",
+    date: 12/09/2022
+  },
+  {
+    email: "admin@admin.com",
+    msg: "bienvenido",
+    date: 12/09/2022
+  },
+  {
+    email: "admin@admin.com",
+    msg: "bienvenido",
+    date: 12/09/2022
+  },
+  {
+    email: "admin@admin.com",
+    msg: "bienvenido",
+    date: 12/09/2022
+  },
+  {
+    email: "admin@admin.com",
+    msg: "bienvenido",
+    date: 12/09/2022
+  }
+];
 
 
 
